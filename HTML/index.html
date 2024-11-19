@@ -55,7 +55,7 @@
 </body>
 <script>
     async function carregarFuncionarios(){
-        const url = "https://cefb9c9b-1c49-4c67-9064-bd6b7509fdf7.mock.pstmn.io/funcionarios";
+        const url = "http://localhost:5000/usuarios";
         const funcionarios = await fetch(url)
         .then(response => response.json())
         .catch(err => {
@@ -108,7 +108,7 @@
         async function excluirFuncionario(id) {
     if (confirm('Deseja realmente excluir o funcionário?')) {
         try {
-            const response = await fetch(`https://cefb9c9b-1c49-4c67-9064-bd6b7509fdf7.mock.pstmn.io/funcionarios/${id}`, {
+            const response = await fetch(`http://localhost:5000/usuarios/${id}`, {
                 method: 'DELETE',
             });
 
