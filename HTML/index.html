@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Index</title>
     <style>
-        .titulo-coluna{
+        .titulo-coluna {
             text-align: center;
             font-weight: bold;
             margin-bottom: 10px;
             margin-top: 20px;
         }
 
-        .funcionario-card{
+        .funcionario-card {
             background-color: bisque;
             padding: 15px;
             border-radius: 5px;
@@ -20,7 +20,7 @@
             margin-top: 15px;
         }
 
-        .Status{
+        .Status {
             display: flex;
         }
     </style>
@@ -36,7 +36,6 @@
             <div class="col-md-4">
                 <div class="titulo-coluna">Ativos</div>
                 <div id="ativos"></div>
-
             </div>
 
             <div class="col-md-4">
@@ -48,80 +47,80 @@
                 <div class="titulo-coluna">Aposentados</div>
                 <div id="aposentados"></div>
             </div>
-
         </div>
-        
     </div>
 </body>
 <script>
-    async function carregarFuncionarios(){
+    async function carregarFuncionarios() {
         const url = "http://localhost:5000/usuarios";
         const funcionarios = await fetch(url)
-        .then(response => response.json())
-        .catch(err => {
-            console.error('Erro ao carregar funcionários:', err);
-        });
+            .then(response => response.json())
+            .catch(err => {
+                console.error('Erro ao carregar funcionários:', err);
+            });
 
         const ativos = document.getElementById('ativos');
         const inativos = document.getElementById('inativos');
         const aposentados = document.getElementById('aposentados');
-    
+
         funcionarios.forEach(funcionarios => {
             //cria uma div e adiciona a classe funcionario-card
             const div = document.createElement('div');
             div.className = 'funcionario-card';
 
             div.innerHTML = `
-            <div class="funcionario-card">
-                        <strong>ID:${funcionarios.id}</strong> <br>
-                        <strong>Nome:${funcionarios.nome}</strong> <br>
-                        <strong>Status:${funcionarios.status}</strong> <br>
-                        <div>
-                            <button class="btn-primary btn-sm" onclick="editarFuncionario(${funcionarios.id})">Editar</button>
-                            <button class="btn-danger btn-sm" onclick="excluirFuncionario(${funcionarios.id})>Excluir</button>
-                        </div>
-                        <div class="Status mt-2">
-                            <select name="status" id="status" class="form-select form-select-sm me-2" style="width: 130px;">
-                                <option value="1" ${funcionarios.status == 1 ? 'selected' : ''}>Ativo</option>
-                                <option value="0" ${funcionarios.status == 0 ? 'selected' : ''}>Inativo</option>
-                                <option value="2" ${funcionarios.status == 2 ? 'selected' : ''}>Aposentado</option>
-                            </select>
-                            <button class="btn btn-succes btn-sm"  onclick="alterarStatus(${funcionarios.id}>Alterar Status</button>
-                        </div>
+                <div class="funcionario-card">
+                    <strong>ID:${funcionarios.id}</strong> <br>
+                    <strong>Nome:${funcionarios.nome}</strong> <br>
+                    <strong>Status:${funcionarios.status}</strong> <br>
+                    <div>
+                        <button class="btn btn-primary btn-sm" onclick="editarFuncionario(${funcionarios.id})">Editar</button>
+                        <button class="btn btn-danger btn-sm" onclick="excluirFuncionario(${funcionarios.id})">Excluir</button>
                     </div>
-            `
-        if(funcionarios.status == '1'){
-            ativos.appendChild(div);
-        } else if (funcionarios.status == '0'){
-            inativos.appendChild(div);
-        } else if (funcionarios.status == '2'){
-            aposentados.appendChild(div);}
+                    <div class="Status mt-2">
+                        <select name="status" id="status" class="form-select form-select-sm me-2" style="width: 130px;">
+                            <option value="1" ${funcionarios.status == 1 ? 'selected' : ''}>Ativo</option>
+                            <option value="0" ${funcionarios.status == 0 ? 'selected' : ''}>Inativo</option>
+                            <option value="2" ${funcionarios.status == 2 ? 'selected' : ''}>Aposentado</option>
+                        </select>
+                        <button class="btn btn-succes btn-sm"  onclick="alterarStatus(${funcionarios.id}>Alterar Status</button>
+                    </div>
+                </div>
+            `;
+
+            if (funcionarios.status == '1') {
+                ativos.appendChild(div);
+            } else if (funcionarios.status == '0') {
+                inativos.appendChild(div);
+            } else if (funcionarios.status == '2') {
+                aposentados.appendChild(div);
+            }
         });
     }
 
-        carregarFuncionarios();
+    carregarFuncionarios();
 
-        function editarFuncionario(id){
-            windows.location.href = `formulario.html?id=${id}`;
-        }
+    function editarFuncionario(id) {
+        windows.location.href = `formulario.html?id=${id}`;
+    }
 
-        async function excluirFuncionario(id) {
-    if (confirm('Deseja realmente excluir o funcionário?')) {
-        try {
-            const response = await fetch(`http://localhost:5000/usuarios/${id}`, {
-                method: 'DELETE',
-            });
+    async function excluirFuncionario(id) {
+        if (confirm('Deseja realmente excluir o funcionário?')) {
+            try {
+                const response = await fetch(`http://localhost:5000/usuarios/${id}`, {
+                    method: 'DELETE',
+                });
 
-            if (response.ok) {
-                alert('Funcionário excluído com sucesso!');
-                carregarFuncionarios(); // Atualiza a lista de funcionários
-            } else {
-                alert('Erro ao excluir funcionário.');
+                if (response.ok) {
+                    alert('Funcionário excluído com sucesso!');
+                    carregarFuncionarios(); // Atualiza a lista de funcionários
+                } else {
+                    alert('Erro ao excluir funcionário.');
+                }
+            } catch (error) {
+                console.log('Erro ao excluir o funcionário:', error);
             }
-        } catch (error) {
-            console.log('Erro ao excluir o funcionário:', error);
         }
     }
-}
 </script>
 </html>
